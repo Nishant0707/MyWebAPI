@@ -46,6 +46,7 @@ app.use(express.json());
 const allowedOrigins = [
   process.env.CLIENT_URL,
   "http://localhost:5173",
+  "https://mywebfrontend-0kli.onrender.com",
   "https://localhost:5173",
 ];
 
