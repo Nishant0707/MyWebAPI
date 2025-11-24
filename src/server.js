@@ -44,9 +44,9 @@ app.use(express.json());
 //  CORS (Production Ready)
 // ========================
 const allowedOrigins = [
-  process.env.CLIENT_URL,
-  "http://localhost:5173",
-  "https://mywebfrontend-0kli.onrender.com",
+  process.env.CLIENT_URL,                  // Render FRONTEND URL from env
+  "https://mywebfrontend-0kli.onrender.com", // Your production frontend
+  "http://localhost:5173",                  // Local development
   "https://localhost:5173",
 ];
 
@@ -90,4 +90,6 @@ app.get("/", (req, res) => {
 //  START SERVER
 // ========================
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🔥 Server running on port ${PORT}`));
+app.listen(PORT, () =>
+  console.log(`🔥 Server running on port ${PORT}`)
+);
