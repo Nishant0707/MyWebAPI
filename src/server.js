@@ -18,34 +18,63 @@ connectDB();
 
 const app = express();
 
-// Re-create __dirname for ES modules
+// ========================
+//  Fix __dirname for ES Modules
+// ========================
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// 🔐 Security headers, BUT allow cross-origin images / static files
+// ========================
+//  HELMET (Production Ready)
+// ========================
 app.use(
   helmet({
-    crossOriginResourcePolicy: false, // ⬅️ IMPORTANT – allow images from other origin
+    contentSecurityPolicy: false, // Render breaks CSP because of cross-origin assets
+    crossOriginResourcePolicy: false, // Allow external images
+    crossOriginEmbedderPolicy: false,
   })
 );
 
-// Body parsing
+// ========================
+//  EXPRESS JSON
+// ========================
 app.use(express.json());
 
-// CORS – only once, with correct origin
+// ========================
+//  CORS (Production Ready)
+// ========================
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  "http://localhost:5173",
+  "https://localhost:5173",
+];
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      console.log("❌ CORS BLOCKED:", origin);
+      return callback(new Error("Not allowed by CORS"));
+    },
     credentials: true,
   })
 );
 
+// ========================
+//  MORGAN LOGGER
+// ========================
 app.use(morgan("dev"));
 
-// ✅ Serve uploads folder statically
+// ========================
+//  STATIC FILES (Uploads)
+// ========================
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
-// ✅ Routes
+// ========================
+//       ROUTES
+// ========================
 app.use("/api/auth", authRoutes);
 app.use("/api/home", homeRoutes);
 app.use("/api/about", aboutRoutes);
@@ -53,8 +82,11 @@ app.use("/api/projects", projectRoutes);
 app.use("/api/contact", contactRoutes);
 
 app.get("/", (req, res) => {
-  res.send("Mypot Backend Running ✔");
+  res.send("🚀 Mypot Backend Running Successfully!");
 });
 
+// ========================
+//  START SERVER
+// ========================
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT} ✔`));
+app.listen(PORT, () => console.log(`🔥 Server running on port ${PORT}`));
