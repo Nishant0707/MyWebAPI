@@ -47,8 +47,8 @@ const allowedOrigins = [
   process.env.CLIENT_URL,
   "http://localhost:5173",
   "https://localhost:5173",
-  "https://mywebfrontend-0kli.onrender.com", 
-  "http://mywebfrontend-0kli.onrender.com",// ✅ Added Render frontend
+  "http://mywebapi-s0ok.onrender.com", 
+  "https://mywebapi-s0ok.onrender.com",// ✅ Added Render frontend
 ];
 
 app.use(
